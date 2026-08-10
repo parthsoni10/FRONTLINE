@@ -15,8 +15,8 @@ export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'eval'
   const [actionStatus, setActionStatus] = useState(null);
   
-  // Theme state with localStorage persistence
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
+  // Theme state with localStorage persistence (defaults to light mode)
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
   
   // Task progress state for better UX
   const [progress, setProgress] = useState(null); // { percent: number, message: string } | null
