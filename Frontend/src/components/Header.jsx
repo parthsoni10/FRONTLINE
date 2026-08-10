@@ -15,16 +15,6 @@ export function Header({ onBatchRun, onRunEval, onRefresh, loading, activeTab, s
       </div>
 
       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-        {/* Theme Change Icon Button */}
-        <button
-          className="btn btn-secondary"
-          onClick={onToggleTheme}
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-          style={{ padding: '0.65rem 0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          {theme === 'dark' ? <Sun size={18} color="#eab308" /> : <Moon size={18} color="#6366f1" />}
-        </button>
-
         <button
           className={`btn ${activeTab === 'dashboard' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveTab('dashboard')}
@@ -45,6 +35,16 @@ export function Header({ onBatchRun, onRunEval, onRefresh, loading, activeTab, s
 
         <button className="btn btn-primary" onClick={onBatchRun} disabled={loading}>
           <Play size={16} /> Run Full Batch
+        </button>
+
+        {/* Rightmost Theme Change Icon Button */}
+        <button
+          className="btn btn-secondary"
+          onClick={onToggleTheme}
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+          style={{ padding: '0.65rem 0.75rem', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+        >
+          {theme === 'dark' ? <Sun size={18} color="#eab308" /> : <Moon size={18} color="#6366f1" />}
         </button>
       </div>
     </header>
