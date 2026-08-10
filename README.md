@@ -8,9 +8,10 @@
 [![Architecture](https://img.shields.io/badge/Architecture-MVC-purple?style=for-the-badge)](https://expressjs.com)
 [![AI Engine](https://img.shields.io/badge/AI-Google%20Gemini%202.5-orange?style=for-the-badge&logo=google)](https://ai.google.dev)
 [![Validation](https://img.shields.io/badge/Validation-Zod%20Schema-green?style=for-the-badge)](https://zod.dev)
+[![Theme](https://img.shields.io/badge/Theme-Light%20%7C%20Dark-yellow?style=for-the-badge)]()
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)]()
 
-*An intelligent, multi-stage customer message triage system built on MongoDB, Express, React, and Node.js following the **MVC Pattern**. Features adversarial prompt injection defense, server-side confidence enforcement, structured tool calling, append-only persistence, and ground truth accuracy scorecards.*
+*An intelligent, multi-stage customer message triage system built on MongoDB, Express, React, and Node.js following the **MVC Pattern**. Features Light & Dark mode switching, animated task progress telemetry, 20-record pagination, adversarial prompt injection defense, server-side confidence enforcement, structured tool calling, append-only persistence, and ground truth accuracy scorecards.*
 
 [Features](#-key-features) • [Architecture](#-mvc-architecture--data-flow) • [Quickstart](#-quickstart-guide) • [API Reference](#-api-reference) • [Evaluation](#-ground-truth-benchmark)
 
@@ -37,11 +38,15 @@
 | Feature | Description |
 | :--- | :--- |
 | **🤖 Dual Engine Classification** | Powered by **Google Gemini AI** with structured tool-choice schemas, backed by an intelligent offline heuristic fallback engine. |
+| **🌗 Light & Dark Theme System** | Features an **icon-only theme switcher button (☀️ / 🌙)** placed at the rightmost end of the header. Text contrast, cards, modals, table headers, drop-downs, and pagination bar automatically adapt to the active mode with `localStorage` persistence. |
+| **⚡ Animated Task Progress Bar UX** | Real-time visual progress bar (`ProgressBar.jsx`) displaying active percentage completion (`0%` → `100%`) and step descriptions during batch classification and evaluation benchmark execution. |
+| **📄 20-Record Pagination** | Server-side and client-side pagination displaying **20 records per page** with `Prev` and `Next` navigation, active page indicators, and total record counters. |
+| **🧹 Short Sanitized Error Telemetry** | Intercepts verbose, raw JSON error strings from API quota limits (HTTP 429 / 403 / 500) and converts them into short, human-readable audit logs (`Gemini API Rate Limit Exceeded (HTTP 429: RESOURCE_EXHAUSTED). Switched to offline fallback engine.`). |
 | **🛡️ Multi-Stage Guardrails** | Pre-check regex filters catch adversarial jailbreaks (`ignore previous instructions`, `you are now FREEDOM_GPT`, `override system prompt`). |
 | **🔒 Zod Contract Enforcement** | Guarantees strict JSON output types before persistence. Features automatic 1-step retry with validation error feedback. |
 | **⚖️ Server-Side Confidence Enforcement** | Any model prediction with `confidence < 0.55` is automatically escalated to `needsHuman: true` by server code. |
 | **📜 Append-Only Audit Logging** | Retries, security alerts, and triage attempts are appended as historical docs—never overwritten. |
-| **🎨 Glassmorphic React Dashboard** | Real-time high-density dark UI with color-coded priority badges (`P0 Urgent` to `P3 Low`), live dispatcher, and filter controls. |
+| **🎨 Glassmorphic React Dashboard** | Real-time high-density UI with color-coded priority badges (`P0 Urgent` to `P3 Low`), live dispatcher form, and filter controls. |
 | **📊 Ground Truth Evaluation** | Built-in evaluator comparing live predictions against hand-labeled gold standard records (`ground_truth.csv`). |
 
 ---
@@ -55,12 +60,15 @@ graph TD
     User([Customer Message / API Request]) --> PreCheck[1. Guardrails Pre-Check<br/>Regex Injection & Empty Check]
     PreCheck -->|Passed| Classifier[2. Gemini AI Classifier<br/>Structured JSON Tool Call]
     PreCheck -->|Injection Detected| PostCheck
+    Classifier -->|API Error 429/403| SanitizeErr[Clean Error Sanitizer<br/>Short Human Summary Log]
+    SanitizeErr --> FallbackEngine[Intelligent Mock Fallback Engine]
     Classifier --> ZodVal[3. Zod Contract Validation]
     ZodVal -->|Valid| PostCheck[4. Guardrails Post-Check<br/>Confidence Threshold < 0.55]
     ZodVal -->|Invalid| Retry[5. Retry with Error Feedback]
     Retry --> PostCheck
+    FallbackEngine --> PostCheck
     PostCheck --> DB[(MongoDB Database<br/>Message, TriageResult, AuditLog)]
-    DB --> ReactUI[6. Glassmorphism React Dashboard<br/>ResultsTable & EvalSummary]
+    DB --> ReactUI[6. React Dashboard<br/>Light/Dark Theme, Progress Bar & 20-Record Pagination]
 ```
 
 ---
@@ -82,9 +90,9 @@ FRONTLINE/
 │
 ├── Frontend/                        # [V] React (Vite) User Interface
 │   ├── src/
-│   │   ├── components/              # ResultsTable, FilterBar, MessageDetailModal, EvalSummary, LiveTriageForm, Header
-│   │   ├── hooks/                   # Custom useTriageData hook
-│   │   ├── styles/                  # Glassmorphic Dark Design System (index.css)
+│   │   ├── components/              # ResultsTable, FilterBar, MessageDetailModal, EvalSummary, LiveTriageForm, Header, ProgressBar
+│   │   ├── hooks/                   # Custom useTriageData hook (with page, limit, totalPages state)
+│   │   ├── styles/                  # Glassmorphic CSS Design System with [data-theme="light"] & [data-theme="dark"]
 │   │   └── api/                     # Axios / Fetch client layer
 │   ├── index.html
 │   └── vite.config.js
@@ -109,7 +117,7 @@ PROMPT_VERSION=v1.3
 MODEL_NAME=gemini-2.5-flash
 ```
 
-> **Note**: If `GEMINI_API_KEY` is not set or quota is exceeded, the system automatically falls back to an intelligent mock classifier, ensuring zero downtime during demonstrations.
+> **Note**: If `GEMINI_API_KEY` is not set or rate limits occur, the error sanitizer records a clean summary (`Gemini API Rate Limit Exceeded (HTTP 429: RESOURCE_EXHAUSTED). Switched to offline fallback engine.`) and seamlessly transitions to the fallback engine with zero downtime.
 
 ---
 
@@ -214,7 +222,7 @@ Average Cost / Msg:     $0.000001 USD
   ```
 
 ### Results Endpoints
-- `GET /api/results` — Fetch triage records. Supports query parameters: `needsHuman=true|false`, `category`, `priority`.
+- `GET /api/results` — Fetch paginated triage records. Query parameters: `page=1`, `limit=20`, `needsHuman=true|false`, `category`, `priority`.
 - `GET /api/results/:id` — Fetch detailed audit breakdown, latency, token metrics, and security logs for a specific message.
 
 ### Evaluation Endpoints
@@ -225,10 +233,11 @@ Average Cost / Msg:     $0.000001 USD
 
 ## 🛡️ Security & Defense Matrix
 
-| Attack Vector | Defense Mechanism | Result |
+| Attack Vector / Event | Defense Mechanism | Result |
 | :--- | :--- | :--- |
 | **Jailbreak ("Ignore instructions")** | Pre-check regex + `<user_message>` XML delimiter tags | Categorized as `abuse_or_injection`, Priority `P0`, `needsHuman: true` |
 | **System Override ("You are FREEDOM_GPT")** | System Prompt Security Framing + Regex pre-filter | Blocked & logged as `injection_attempt` in `AuditLog` |
+| **API Quota Exceeded (HTTP 429)** | Error Sanitizer (`formatGeminiErrorMessage`) | Formats raw JSON to short summary log & seamlessly triggers offline fallback |
 | **Ambiguous / Low Confidence Input** | Code-enforced threshold (`confidence < 0.55`) | Server overrides `needsHuman: true` regardless of model output |
 | **Malformed LLM Output** | Zod Schema Validation + 1-step Retry Feedback | Falls back gracefully to synthetic `needsHuman: true` document without crashing |
 
