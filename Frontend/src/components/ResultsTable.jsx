@@ -118,7 +118,7 @@ export function ResultsTable({ results, onSelectRow, page = 1, totalPages = 1, t
           alignItems: 'center',
           padding: '0.85rem 1.5rem',
           borderTop: '1px solid var(--border-glass)',
-          background: 'rgba(15, 23, 42, 0.6)',
+          background: 'var(--table-th-bg)',
           fontSize: '0.85rem',
           color: 'var(--text-secondary)',
           flexWrap: 'wrap',
@@ -126,7 +126,7 @@ export function ResultsTable({ results, onSelectRow, page = 1, totalPages = 1, t
         }}
       >
         <div>
-          Showing <strong style={{ color: '#ffffff' }}>{startRecord}</strong>–<strong style={{ color: '#ffffff' }}>{endRecord}</strong> of <strong style={{ color: '#ffffff' }}>{total}</strong> records (20 per page)
+          Showing <strong style={{ color: 'var(--text-primary)' }}>{startRecord}</strong>–<strong style={{ color: 'var(--text-primary)' }}>{endRecord}</strong> of <strong style={{ color: 'var(--text-primary)' }}>{total}</strong> records (20 per page)
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
