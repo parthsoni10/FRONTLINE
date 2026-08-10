@@ -91,6 +91,38 @@ function mockClassify(rawText, preCheckFlags) {
   };
 }
 
+/**
+ * Formats verbose API errors (such as long JSON rate limit payloads) into concise, readable summaries.
+ */
+function formatGeminiErrorMessage(err) {
+  const msg = err?.message || String(err || '');
+  if (msg.includes('429') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('Quota exceeded')) {
+    return 'Gemini API Rate Limit Exceeded (HTTP 429: RESOURCE_EXHAUSTED). Switched to offline fallback engine.';
+  }
+  if (msg.includes('403') || msg.includes('PERMISSION_DENIED') || msg.includes('reported as leaked')) {
+    return 'Gemini API Key Permission Denied / Key Leaked (HTTP 403). Switched to offline fallback engine.';
+  }
+  if (msg.includes('400') || msg.includes('INVALID_ARGUMENT')) {
+    return 'Gemini API Invalid Request Payload (HTTP 400). Switched to offline fallback engine.';
+  }
+  if (msg.includes('500') || msg.includes('INTERNAL')) {
+    return 'Gemini API Internal Server Error (HTTP 500). Switched to offline fallback engine.';
+  }
+
+  try {
+    const parsed = JSON.parse(msg);
+    if (parsed.error && parsed.error.message) {
+      const shortDesc = parsed.error.message.split('\n')[0];
+      return `Gemini API Error (${parsed.error.status || parsed.error.code}): ${shortDesc}. Switched to offline fallback engine.`;
+    }
+  } catch (e) {
+    // Not raw JSON
+  }
+
+  const shortMsg = msg.length > 120 ? `${msg.slice(0, 117)}...` : msg;
+  return `Gemini API call failed: ${shortMsg}. Switched to offline fallback engine.`;
+}
+
 export async function classifyMessage(rawText) {
   const startTime = Date.now();
   const preCheckFlags = runPreChecks(rawText);
@@ -188,10 +220,11 @@ export async function classifyMessage(rawText) {
         }
       }
     } catch (err) {
-      console.warn(`[Classifier] Gemini API call error: ${err.message}. Using intelligent mock fallback.`);
+      const cleanErrorMsg = formatGeminiErrorMessage(err);
+      console.warn(`[Classifier] ${cleanErrorMsg}`);
       auditLogs.push({
         eventType: 'retry',
-        detail: `Gemini API call failed (${err.message}). Using fallback engine.`,
+        detail: cleanErrorMsg,
       });
       modelUsed = `${config.modelName}-mock-fallback`;
       rawDecision = mockClassify(rawText, preCheckFlags);
