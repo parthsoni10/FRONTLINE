@@ -8,6 +8,16 @@
   --text-primary: #f9fafb;
   --text-secondary: #9ca3af;
   --text-muted: #6b7280;
+  --header-bg: rgba(11, 15, 25, 0.85);
+  --table-th-bg: rgba(15, 23, 42, 0.8);
+  --modal-bg: #0f172a;
+  --modal-overlay: rgba(3, 7, 18, 0.8);
+  --input-bg: rgba(15, 23, 42, 0.9);
+  --input-border: rgba(255, 255, 255, 0.15);
+  --brand-title-grad: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  --code-bg: #090d16;
+  --code-color: #a7f3d0;
+  --panel-bg-subtle: rgba(0, 0, 0, 0.3);
 
   --accent-purple: #8b5cf6;
   --accent-indigo: #6366f1;
@@ -37,6 +47,34 @@
   --font-code: 'JetBrains Mono', monospace;
 }
 
+[data-theme="light"] {
+  --bg-dark: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: rgba(241, 245, 249, 0.95);
+  --border-glass: rgba(0, 0, 0, 0.08);
+  --border-glass-light: rgba(0, 0, 0, 0.16);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --header-bg: rgba(255, 255, 255, 0.85);
+  --table-th-bg: rgba(241, 245, 249, 0.95);
+  --modal-bg: #ffffff;
+  --modal-overlay: rgba(15, 23, 42, 0.6);
+  --input-bg: rgba(255, 255, 255, 0.95);
+  --input-border: rgba(0, 0, 0, 0.15);
+  --brand-title-grad: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+  --code-bg: #0f172a;
+  --code-color: #38bdf8;
+  --panel-bg-subtle: rgba(241, 245, 249, 0.8);
+
+  --p0-bg: rgba(239, 68, 68, 0.1);
+  --p1-bg: rgba(249, 115, 22, 0.1);
+  --p2-bg: rgba(234, 179, 8, 0.1);
+  --p3-bg: rgba(59, 130, 246, 0.1);
+  --human-bg: rgba(244, 63, 94, 0.12);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -46,14 +84,15 @@
 body {
   background-color: var(--bg-dark);
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(139, 92, 246, 0.06) 0px, transparent 50%);
   background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--font-main);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 /* Glassmorphism containers */
@@ -63,8 +102,8 @@ body {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-glass);
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.25s ease;
 }
 
 .glass-panel:hover {
@@ -77,13 +116,14 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.25rem 2rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--border-glass);
-  background: rgba(11, 15, 25, 0.85);
+  background: var(--header-bg);
   backdrop-filter: blur(20px);
   position: sticky;
   top: 0;
   z-index: 100;
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
 .brand {
@@ -109,7 +149,7 @@ body {
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+  background: var(--brand-title-grad);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -119,6 +159,60 @@ body {
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+/* Progress Bar UX Component */
+.progress-container {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass-light);
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.2s ease;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--border-glass-light);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-indigo), var(--accent-purple), var(--accent-pink));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-bar-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 /* Badges */
@@ -191,7 +285,7 @@ body {
 }
 
 .custom-table th {
-  background: rgba(15, 23, 42, 0.8);
+  background: var(--table-th-bg);
   color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
@@ -232,7 +326,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(3, 7, 18, 0.8);
+  background: var(--modal-overlay);
   backdrop-filter: blur(10px);
   z-index: 1000;
   display: flex;
@@ -243,14 +337,15 @@ body {
 }
 
 .modal-content {
-  background: #0f172a;
+  background: var(--modal-bg);
+  color: var(--text-primary);
   border: 1px solid var(--border-glass-light);
   border-radius: 20px;
   width: 100%;
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
   padding: 2rem;
 }
 
@@ -261,13 +356,13 @@ body {
 
 /* Code blocks */
 pre.code-block {
-  background: #090d16;
+  background: var(--code-bg);
   border: 1px solid var(--border-glass);
   border-radius: 12px;
   padding: 1rem;
   font-family: var(--font-code);
   font-size: 0.82rem;
-  color: #a7f3d0;
+  color: var(--code-color);
   overflow-x: auto;
 }
 
@@ -298,11 +393,20 @@ pre.code-block {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-card);
   color: var(--text-primary);
-  border: 1px solid var(--border-glass);
+  border: 1px solid var(--border-glass-light);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--bg-card-hover);
+}
+
+.spin {
+  animation: spin-anim 1s linear infinite;
+}
+
+@keyframes spin-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

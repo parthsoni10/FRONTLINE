@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShieldAlert, Play, RefreshCw, BarChart3, Zap } from 'lucide-react';
+import { ShieldAlert, Play, RefreshCw, BarChart3, Zap, Sun, Moon } from 'lucide-react';
 
-export function Header({ onBatchRun, onRunEval, onRefresh, loading, activeTab, setActiveTab }) {
+export function Header({ onBatchRun, onRunEval, onRefresh, loading, activeTab, setActiveTab, theme, onToggleTheme }) {
   return (
     <header className="app-header">
       <div className="brand">
@@ -14,7 +14,17 @@ export function Header({ onBatchRun, onRunEval, onRefresh, loading, activeTab, s
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        {/* Theme Change Button */}
+        <button
+          className="btn btn-secondary"
+          onClick={onToggleTheme}
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+        >
+          {theme === 'dark' ? <Sun size={16} color="#eab308" /> : <Moon size={16} color="#6366f1" />}
+          <span>{theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+        </button>
+
         <button
           className={`btn ${activeTab === 'dashboard' ? 'btn-primary' : 'btn-secondary'}`}
           onClick={() => setActiveTab('dashboard')}

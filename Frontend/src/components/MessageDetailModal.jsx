@@ -48,11 +48,11 @@ export function MessageDetailModal({ item, onClose }) {
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* Raw message block */}
-            <div style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border-glass)' }}>
+            <div style={{ background: 'var(--panel-bg-subtle)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border-glass)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
                 <FileText size={14} /> Raw Customer Message Payload
               </div>
-              <p style={{ fontSize: '0.95rem', color: '#ffffff', lineHeight: 1.5, fontFamily: 'var(--font-main)' }}>
+              <p style={{ fontSize: '0.95rem', color: 'var(--text-primary)', lineHeight: 1.5, fontFamily: 'var(--font-main)' }}>
                 {result.rawTextSnapshot ? `"${result.rawTextSnapshot}"` : <em style={{ color: 'var(--text-muted)' }}>(empty payload)</em>}
               </p>
             </div>
@@ -87,7 +87,7 @@ export function MessageDetailModal({ item, onClose }) {
               <p style={{ fontSize: '0.9rem', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>
                 <strong>Summary:</strong> {result.summary}
               </p>
-              <p style={{ fontSize: '0.9rem', color: '#a7f3d0' }}>
+              <p style={{ fontSize: '0.9rem', color: '#10b981' }}>
                 <strong>Suggested Action:</strong> {result.suggestedAction}
               </p>
               {result.flagReason && (
@@ -104,7 +104,7 @@ export function MessageDetailModal({ item, onClose }) {
                   <ShieldAlert size={16} /> Security & Rule Audit Events ({auditLogs.length})
                 </h4>
                 {auditLogs.map((log, idx) => (
-                  <div key={idx} style={{ fontSize: '0.82rem', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>
+                  <div key={idx} style={{ fontSize: '0.82rem', borderBottom: '1px solid var(--border-glass)', paddingBottom: '0.5rem', marginBottom: '0.5rem' }}>
                     <span style={{ color: 'var(--p0-red)', fontWeight: 600, textTransform: 'uppercase', marginRight: '0.5rem' }}>[{log.eventType}]</span>
                     <span style={{ color: 'var(--text-primary)' }}>{log.detail}</span>
                   </div>
@@ -113,7 +113,7 @@ export function MessageDetailModal({ item, onClose }) {
             )}
 
             {/* Technical Telemetry */}
-            <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.78rem', color: 'var(--text-secondary)', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.2)', borderRadius: '8px' }}>
+            <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.78rem', color: 'var(--text-secondary)', padding: '0.75rem 1rem', background: 'var(--panel-bg-subtle)', borderRadius: '8px', flexWrap: 'wrap' }}>
               <span><Cpu size={12} style={{ display: 'inline', marginRight: '3px' }} /> Tokens: In {result.inputTokens || 0} / Out {result.outputTokens || 0}</span>
               <span><Activity size={12} style={{ display: 'inline', marginRight: '3px' }} /> Latency: {result.latencyMs}ms</span>
               <span><DollarSign size={12} style={{ display: 'inline', marginRight: '3px' }} /> Cost: ${Number(result.estCostUsd || 0).toFixed(6)} USD</span>

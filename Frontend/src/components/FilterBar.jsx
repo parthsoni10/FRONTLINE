@@ -14,7 +14,7 @@ export function FilterBar({ filters, onChange, totalCount, needsHumanCount }) {
           value={filters.needsHuman}
           onChange={(e) => onChange({ needsHuman: e.target.value })}
           style={{
-            background: 'rgba(15, 23, 42, 0.9)',
+            background: 'var(--input-bg)',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-glass-light)',
             padding: '0.5rem 0.85rem',
@@ -34,7 +34,7 @@ export function FilterBar({ filters, onChange, totalCount, needsHumanCount }) {
           value={filters.priority}
           onChange={(e) => onChange({ priority: e.target.value })}
           style={{
-            background: 'rgba(15, 23, 42, 0.9)',
+            background: 'var(--input-bg)',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-glass-light)',
             padding: '0.5rem 0.85rem',
@@ -56,7 +56,7 @@ export function FilterBar({ filters, onChange, totalCount, needsHumanCount }) {
           value={filters.category}
           onChange={(e) => onChange({ category: e.target.value })}
           style={{
-            background: 'rgba(15, 23, 42, 0.9)',
+            background: 'var(--input-bg)',
             color: 'var(--text-primary)',
             border: '1px solid var(--border-glass-light)',
             padding: '0.5rem 0.85rem',
@@ -82,11 +82,11 @@ export function FilterBar({ filters, onChange, totalCount, needsHumanCount }) {
       {/* Counter badges */}
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-          <ShieldCheck size={16} color="#10b981" /> Total Records: <strong style={{ color: '#ffffff' }}>{totalCount}</strong>
+          <ShieldCheck size={16} color="#10b981" /> Total Records: <strong style={{ color: 'var(--text-primary)' }}>{totalCount}</strong>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', color: 'var(--human-alert)' }}>
-          <AlertTriangle size={16} /> Needs Human: <strong style={{ color: '#ffffff' }}>{needsHumanCount}</strong>
+          <AlertTriangle size={16} /> Needs Human: <strong style={{ color: 'var(--text-primary)' }}>{needsHumanCount}</strong>
         </div>
       </div>
     </div>

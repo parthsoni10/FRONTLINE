@@ -66,7 +66,7 @@ export function LiveTriageForm({ onTriageComplete }) {
           placeholder="Paste or type raw customer support payload to test live classification..."
           style={{
             flex: 1,
-            background: 'rgba(15, 23, 42, 0.9)',
+            background: 'var(--input-bg)',
             border: '1px solid var(--border-glass-light)',
             borderRadius: '10px',
             padding: '0.75rem 1rem',

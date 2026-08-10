@@ -25,7 +25,7 @@ export function EvalSummary({ evalData, onRunEval, loading }) {
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--accent-purple)' }}>
             <Award size={22} />
-            <h2 style={{ fontFamily: 'var(--font-title)', fontSize: '1.3rem', fontWeight: 700, color: '#ffffff' }}>
+            <h2 style={{ fontFamily: 'var(--font-title)', fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)' }}>
               Ground Truth Agreement Scorecard
             </h2>
           </div>
@@ -43,7 +43,7 @@ export function EvalSummary({ evalData, onRunEval, loading }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem' }}>
         <div className="glass-panel" style={{ padding: '1.5rem', borderTop: '4px solid var(--accent-indigo)' }}>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textTransform: 'uppercase', fontWeight: 600 }}>Overall Agreement</span>
-          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#ffffff', fontFamily: 'var(--font-title)', margin: '0.35rem 0' }}>
+          <div style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-title)', margin: '0.35rem 0' }}>
             {formatPct(evalData.overallAgreement)}
           </div>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Exact match across all fields</span>
@@ -97,8 +97,8 @@ export function EvalSummary({ evalData, onRunEval, loading }) {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             {evalData.disagreements.map((d, idx) => (
-              <div key={idx} style={{ background: 'rgba(0,0,0,0.3)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border-glass)' }}>
-                <div style={{ fontWeight: 600, color: '#ffffff', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
+              <div key={idx} style={{ background: 'var(--panel-bg-subtle)', padding: '1rem', borderRadius: '12px', border: '1px solid var(--border-glass)' }}>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.35rem', fontSize: '0.9rem' }}>
                   [{d.messageId}] "{d.rawText}"
                 </div>
                 <div style={{ display: 'flex', gap: '1.5rem', fontSize: '0.8rem', color: 'var(--text-secondary)', flexWrap: 'wrap' }}>
