@@ -1,7 +1,13 @@
 import React from 'react';
-import { Filter, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { Filter, AlertTriangle, ShieldCheck, RotateCcw } from 'lucide-react';
 
 export function FilterBar({ filters, onChange, totalCount, needsHumanCount }) {
+  const hasActiveFilters = filters.needsHuman !== '' || filters.priority !== 'all' || filters.category !== 'all';
+
+  const handleClear = () => {
+    onChange({ needsHuman: '', priority: 'all', category: 'all' });
+  };
+
   return (
     <div className="glass-panel" style={{ padding: '1.25rem 1.75rem', marginBottom: '1.5rem', display: 'flex', flexWrap: 'wrap', gap: '1.25rem', alignItems: 'center', justifyContent: 'space-between' }}>
       <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -77,6 +83,19 @@ export function FilterBar({ filters, onChange, totalCount, needsHumanCount }) {
           <option value="out_of_scope">Out of Scope</option>
           <option value="other">Other / Fallback</option>
         </select>
+
+        {/* Clear Filters Button */}
+        {hasActiveFilters && (
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleClear}
+            title="Reset all filters to default"
+            style={{ padding: '0.45rem 0.75rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+          >
+            <RotateCcw size={14} color="var(--human-alert)" /> Clear Filters
+          </button>
+        )}
       </div>
 
       {/* Counter badges */}
