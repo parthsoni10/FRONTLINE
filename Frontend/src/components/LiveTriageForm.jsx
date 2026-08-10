@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Send, Zap, ShieldAlert, Sparkles } from 'lucide-react';
 import { triageSingleMessage } from '../api/client';
 
-export function LiveTriageForm({ onTriageComplete }) {
+export function LiveTriageForm({ onTriageComplete, onProgress }) {
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -11,16 +11,40 @@ export function LiveTriageForm({ onTriageComplete }) {
     if (!text.trim()) return;
 
     setLoading(true);
+    if (onProgress) {
+      onProgress({ percent: 35, message: 'Analyzing message payload & executing guardrail pre-checks...' });
+    }
+
+    let currentPct = 35;
+    const interval = setInterval(() => {
+      currentPct += 20;
+      if (currentPct >= 85) {
+        clearInterval(interval);
+      } else if (onProgress) {
+        onProgress({ percent: currentPct, message: 'Classifying message with Gemini AI & verifying Zod contract...' });
+      }
+    }, 200);
+
     try {
       const res = await triageSingleMessage(text);
+      clearInterval(interval);
       if (res.success && res.triageResult) {
+        if (onProgress) {
+          onProgress({ percent: 100, message: '✓ Single message dispatched & triaged!' });
+        }
         onTriageComplete(res.triageResult);
         setText('');
       }
     } catch (err) {
+      clearInterval(interval);
+      if (onProgress) onProgress(null);
       alert(`Live triage error: ${err.message}`);
     } finally {
+      clearInterval(interval);
       setLoading(false);
+      setTimeout(() => {
+        if (onProgress) onProgress(null);
+      }, 1500);
     }
   };
 

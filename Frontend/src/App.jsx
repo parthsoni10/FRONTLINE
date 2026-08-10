@@ -125,7 +125,10 @@ export default function App() {
 
       {activeTab === 'dashboard' ? (
         <main>
-          <LiveTriageForm onTriageComplete={() => refresh()} />
+          <LiveTriageForm
+            onTriageComplete={() => refresh()}
+            onProgress={(prog) => setProgress(prog)}
+          />
           <FilterBar
             filters={filters}
             onChange={updateFilters}
