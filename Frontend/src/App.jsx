@@ -9,7 +9,7 @@ import { LiveTriageForm } from './components/LiveTriageForm';
 import { triggerBatchRun, runEvaluation } from './api/client';
 
 export default function App() {
-  const { results, total, loading, error, filters, updateFilters, evalData, refresh } = useTriageData();
+  const { results, total, page, setPage, totalPages, limit, loading, error, filters, updateFilters, evalData, refresh } = useTriageData();
   const [selectedRow, setSelectedRow] = useState(null);
   const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard' | 'eval'
   const [actionStatus, setActionStatus] = useState(null);
@@ -74,7 +74,15 @@ export default function App() {
             totalCount={total}
             needsHumanCount={needsHumanCount}
           />
-          <ResultsTable results={results} onSelectRow={(item) => setSelectedRow(item)} />
+          <ResultsTable
+            results={results}
+            onSelectRow={(item) => setSelectedRow(item)}
+            page={page}
+            totalPages={totalPages}
+            total={total}
+            limit={limit}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
         </main>
       ) : (
         <main>

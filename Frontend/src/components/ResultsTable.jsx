@@ -1,7 +1,7 @@
 import React from 'react';
-import { AlertCircle, CheckCircle2, ShieldAlert, Clock, ChevronRight } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ShieldAlert, Clock, ChevronRight, ChevronLeft } from 'lucide-react';
 
-export function ResultsTable({ results, onSelectRow }) {
+export function ResultsTable({ results, onSelectRow, page = 1, totalPages = 1, total = 0, limit = 20, onPageChange }) {
   if (!results || results.length === 0) {
     return (
       <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
@@ -25,6 +25,9 @@ export function ResultsTable({ results, onSelectRow }) {
         return <span className="badge">{prio}</span>;
     }
   };
+
+  const startRecord = (page - 1) * limit + 1;
+  const endRecord = Math.min(page * limit, total);
 
   return (
     <div className="glass-panel table-container">
@@ -106,6 +109,50 @@ export function ResultsTable({ results, onSelectRow }) {
           })}
         </tbody>
       </table>
+
+      {/* Glassmorphism Pagination Bar */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '0.85rem 1.5rem',
+          borderTop: '1px solid var(--border-glass)',
+          background: 'rgba(15, 23, 42, 0.6)',
+          fontSize: '0.85rem',
+          color: 'var(--text-secondary)',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}
+      >
+        <div>
+          Showing <strong style={{ color: '#ffffff' }}>{startRecord}</strong>–<strong style={{ color: '#ffffff' }}>{endRecord}</strong> of <strong style={{ color: '#ffffff' }}>{total}</strong> records (20 per page)
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
+            onClick={() => onPageChange && onPageChange(page - 1)}
+            disabled={page <= 1}
+          >
+            <ChevronLeft size={16} /> Prev
+          </button>
+
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)', padding: '0 0.5rem' }}>
+            Page {page} of {totalPages}
+          </span>
+
+          <button
+            className="btn btn-secondary"
+            style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
+            onClick={() => onPageChange && onPageChange(page + 1)}
+            disabled={page >= totalPages}
+          >
+            Next <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { AuditLog } from '../models/AuditLog.js';
 
 export async function getTriageResults(req, res) {
   try {
-    const { needsHuman, category, priority, limit = 100, page = 1 } = req.query;
+    const { needsHuman, category, priority, limit = 20, page = 1 } = req.query;
 
     const filter = {};
     if (needsHuman !== undefined && needsHuman !== '') {
@@ -16,22 +16,25 @@ export async function getTriageResults(req, res) {
       filter.priority = priority;
     }
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const parsedLimit = parseInt(limit);
+    const parsedPage = parseInt(page);
+    const skip = (parsedPage - 1) * parsedLimit;
 
-    // Latest result per message or latest overall
     const results = await TriageResult.find(filter)
       .populate('messageId')
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(parsedLimit);
 
     const total = await TriageResult.countDocuments(filter);
+    const totalPages = Math.ceil(total / parsedLimit) || 1;
 
     res.json({
       success: true,
       total,
-      page: parseInt(page),
-      limit: parseInt(limit),
+      page: parsedPage,
+      limit: parsedLimit,
+      totalPages,
       results,
     });
   } catch (error) {

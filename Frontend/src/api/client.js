@@ -1,10 +1,12 @@
 const BASE_URL = '/api';
 
-export async function fetchResults({ needsHuman = '', category = 'all', priority = 'all' } = {}) {
+export async function fetchResults({ needsHuman = '', category = 'all', priority = 'all', page = 1, limit = 20 } = {}) {
   const params = new URLSearchParams();
   if (needsHuman !== '') params.append('needsHuman', needsHuman);
   if (category && category !== 'all') params.append('category', category);
   if (priority && priority !== 'all') params.append('priority', priority);
+  params.append('page', page);
+  params.append('limit', limit);
 
   const res = await fetch(`${BASE_URL}/results?${params.toString()}`);
   if (!res.ok) throw new Error('Failed to fetch triage results');
