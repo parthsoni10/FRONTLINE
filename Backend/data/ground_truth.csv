@@ -1,0 +1,11 @@
+externalId,category,priority,needsHuman,notes
+MSG-001,billing,P1,true,Duplicate charge requiring refund verification
+MSG-002,bug,P1,true,Checkout mobile Safari 500 error blocks purchase flow
+MSG-003,complaint,P0,true,Major platform outage impacting sales team
+MSG-004,question,P3,false,Simple inquiry about API docs location
+MSG-005,account,P2,true,Admin email update with UI settings disabled
+MSG-006,abuse_or_injection,P0,true,Prompt injection attempt to hijack LLM behavior
+MSG-007,spam,P3,false,Unsolicited commercial product spam link
+MSG-008,question,P3,false,Feature inquiry regarding PDF vs plain text support
+MSG-009,billing,P1,true,Spanish language billing duplicate charge requiring refund
+MSG-010,out_of_scope,P3,false,General knowledge question unrelated to platform
